@@ -5,6 +5,7 @@ class User extends Model {
     public id!: number;
     public name!: string;
     public email!: string;
+    public password!: string;
     public readonly createdAt!: Date;
     public readonly updatedAt!: Date;
 }
@@ -24,11 +25,23 @@ User.init(
             type: new DataTypes.STRING(128),
             allowNull: false,
         },
+        password: {
+            type: new DataTypes.STRING(128),
+            allowNull: false
+        },
+
     },
     {
         tableName: 'users',
         sequelize,
+    
     }
 );
+
+User.prototype.toJSON = function () {
+    const userObj = this.get();
+    delete userObj.password;
+    return userObj;
+};
 
 export default User;
